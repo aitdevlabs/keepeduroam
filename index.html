@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KeepEduroam - Save Sessions. Use Sessions. Share Sessions.</title>
-    <meta name="description" content="Save your Wi-Fi session when connected, use it when offline. Never worry about internet access again." />
+    <meta name="description" content="Save your Wi-Fi session when connected, use it when offline." />
     <link rel="icon" type="image/png" href="images/app-icon.png" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+</button>
 
 <div class="container">
 
@@ -27,7 +32,7 @@
     <!-- Hero -->
     <div class="card" style="text-align:center; padding:40px 24px;">
         <div style="font-size:4rem; margin-bottom:12px;">📡</div>
-        <h2 style="border-bottom:none; margin-top:0;">Your Internet, Your Session</h2>
+        <h2 style="border-bottom:none; margin-top:0; color:var(--accent);">Your Internet, Your Session</h2>
         <p style="max-width:600px; margin:0 auto 24px auto;">
             Connect to Wi-Fi, tap CONNECT, and save your session.
             When offline, tap CONNECT again and use your saved session.
@@ -94,6 +99,23 @@
     </footer>
 
 </div>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('theme', newTheme);
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+</script>
 
 </body>
 </html>

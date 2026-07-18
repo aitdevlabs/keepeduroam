@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,21 +8,23 @@
 </head>
 <body>
 
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+</button>
+
 <div class="container">
 
-    <!-- Header -->
     <header>
         <h1>⏰ KeepEduroam</h1>
         <p class="text-muted">Terms of Service</p>
         <p style="color:var(--text-muted); font-size:0.85rem;">
-            Last Updated: July 7, 2026
+            Last Updated: July 18, 2026
         </p>
         <p style="margin-top:8px;">
             <a href="index.html">← Back to Home</a>
         </p>
     </header>
 
-    <!-- Introduction -->
     <div class="card">
         <p>
             By using KeepEduroam, you agree to these Terms of Service.
@@ -78,12 +80,12 @@
     <h2>5. Provider & Consumer Roles</h2>
     <div class="card">
         <ul>
-            <li><strong>Provider</strong> — When you "save a session," you are sharing your connection. You earn session time for sharing.</li>
+            <li><strong>Provider</strong> — When you "save a session," you are sharing your connection.</li>
             <li><strong>Consumer</strong> — When you "use a saved session," you are using someone else's connection.</li>
-            <li><strong>Session Exchange</strong> — 1 hour saved = 1 hour available. It's a fair exchange.</li>
+            <li><strong>Session Exchange</strong> — 1 hour saved = 1 hour available.</li>
         </ul>
         <p style="margin-top:8px; color:var(--text-muted); font-size:0.9rem;">
-            ⚠️ Important: You are sharing your internet connection. Please be mindful of your data usage.
+            ⚠️ You are sharing your internet connection. Please be mindful of your data usage.
         </p>
     </div>
 
@@ -111,8 +113,7 @@
             <li>Data security beyond our control</li>
         </ul>
         <p style="margin-top:8px;">
-            We are not responsible for any damages, loss of data, or issues
-            caused by using our service.
+            We are not responsible for any damages, loss of data, or issues caused by using our service.
         </p>
     </div>
 
@@ -146,7 +147,6 @@
         </p>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>
             <a href="index.html">Home</a>
@@ -159,6 +159,21 @@
     </footer>
 
 </div>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('theme', newTheme);
+}
+
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+</script>
 
 </body>
 </html>

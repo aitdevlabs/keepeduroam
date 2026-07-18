@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    🌙
+</button>
 
 <div class="container">
 
@@ -23,7 +28,8 @@
     <div class="card">
         <p>
             Find answers to common questions below. If you need more help,
-            contact us at <a href="mailto:support@keepeduroam.com">support@keepeduroam.com</a>.
+            fill out the form below or email us at
+            <a href="mailto:support@keepeduroam.com">support@keepeduroam.com</a>.
         </p>
     </div>
 
@@ -70,31 +76,41 @@
         <p><strong>Yes!</strong> 100% free. No subscriptions, no in-app purchases. Just optional rewarded ads.</p>
     </div>
 
-    <div class="card">
-        <h3>❓ How does session time work?</h3>
-        <p><strong>1 hour connected = 1 hour saved.</strong> When you use a session, time decreases. Watch ads to add more.</p>
-    </div>
+    <!-- Contact Form -->
+    <h2>📝 Send Us a Message</h2>
 
     <div class="card">
-        <h3>❓ What happens if I disconnect?</h3>
-        <p>Your session is saved. You can reconnect anytime. Session time only decreases when you're actively using it.</p>
-    </div>
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" placeholder="e.g., John Doe" required>
+            </div>
 
-    <div class="card">
-        <h3>❓ Can I use KeepEduroam anywhere?</h3>
-        <p>KeepEduroam works best on university campuses with eduroam coverage. Session sharing requires other users nearby.</p>
-    </div>
+            <div class="form-group">
+                <label for="email">Your Email</label>
+                <input type="email" id="email" placeholder="e.g., john@university.edu" required>
+            </div>
 
-    <!-- Contact -->
-    <h2>📧 Need More Help?</h2>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" required>
+                    <option value="">Select a category...</option>
+                    <option value="general">General Question</option>
+                    <option value="technical">Technical Issue</option>
+                    <option value="feature">Feature Request</option>
+                    <option value="bug">Bug Report</option>
+                    <option value="privacy">Privacy Concern</option>
+                </select>
+            </div>
 
-    <div class="card" style="text-align:center;">
-        <p style="font-size:1.1rem;">
-            📧 <a href="mailto:support@keepeduroam.com">support@keepeduroam.com</a>
-        </p>
-        <p style="color:var(--text-muted); font-size:0.9rem;">
-            We'll respond within 24-48 hours.
-        </p>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+        <div id="formStatus"></div>
     </div>
 
     <!-- Footer -->
@@ -110,6 +126,87 @@
     </footer>
 
 </div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('theme', newTheme);
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAoO-4w3mS_XDu5UioGIZCbpNFKRKtlfcE",
+    authDomain: "keepeduroam.firebaseapp.com",
+    projectId: "keepeduroam",
+    storageBucket: "keepeduroam.firebasestorage.app",
+    messagingSenderId: "541817234832",
+    appId: "1:541817234832:ios:0cced87fb3014e47e27f15"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Contact Form Handler
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const category = document.getElementById('category').value;
+    const message = document.getElementById('message').value.trim();
+    const statusDiv = document.getElementById('formStatus');
+
+    // Validate
+    if (!name || !email || !category || !message) {
+        statusDiv.className = 'error';
+        statusDiv.textContent = '⚠️ Please fill in all fields.';
+        return;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+        statusDiv.className = 'error';
+        statusDiv.textContent = '⚠️ Please enter a valid email address.';
+        return;
+    }
+
+    statusDiv.className = '';
+    statusDiv.textContent = 'Sending...';
+    statusDiv.style.display = 'block';
+
+    try {
+        await db.collection('contacts').add({
+            name: name,
+            email: email,
+            category: category,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            source: 'support_page'
+        });
+
+        statusDiv.className = 'success';
+        statusDiv.textContent = '✅ Message sent! We\'ll respond within 24-48 hours.';
+        document.getElementById('contactForm').reset();
+    } catch (error) {
+        console.error('Error sending message:', error);
+        statusDiv.className = 'error';
+        statusDiv.textContent = '❌ Failed to send message. Please try again or email us directly.';
+    }
+});
+</script>
 
 </body>
 </html>
