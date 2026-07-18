@@ -27,13 +27,37 @@
     <!-- Intro -->
     <div class="card">
         <p>
-            Find answers to common questions below. If you need more help,
-            fill out the form below or email us at
-            <a href="mailto:support@keepeduroam.com">support@keepeduroam.com</a>.
+            Find answers to common questions below. If you need more help, you have two options:
+        </p>
+        <ul style="margin-top:8px;">
+            <li><strong>💬 Community Forum</strong> — Ask other users (fast, anonymous, public)</li>
+            <li><strong>📧 Contact Form</strong> — Email us directly (private, admin-only)</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================
+         COMMUNITY FORUM SECTION (NEW)
+         ============================================================ -->
+    <h2>💬 Community Help</h2>
+
+    <div class="card" style="text-align:center; border: 2px solid #4ECDC4; padding: 32px 24px;">
+        <div style="font-size:3rem; margin-bottom:12px;">👥</div>
+        <h3 style="color:#4ECDC4; margin-top:0;">Ask the Community</h3>
+        <p style="max-width:500px; margin:0 auto 16px;">
+            Get help from other KeepEduroam users. Ask questions, share knowledge, and help others.
+            All posts are anonymous.
+        </p>
+        <a href="https://keepeduroam-community.vercel.app" target="_blank" class="btn btn-primary">
+            💬 Visit Community Forum
+        </a>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:12px;">
+            ⚡ 100% anonymous · Free · Community-driven
         </p>
     </div>
 
-    <!-- FAQ Section -->
+    <!-- ============================================================
+         FAQ SECTION
+         ============================================================ -->
     <h2>💬 Frequently Asked Questions</h2>
 
     <div class="card">
@@ -76,10 +100,27 @@
         <p><strong>Yes!</strong> 100% free. No subscriptions, no in-app purchases. Just optional rewarded ads.</p>
     </div>
 
-    <!-- Contact Form -->
-    <h2>📝 Send Us a Message</h2>
+    <div class="card">
+        <h3>❓ How does session time work?</h3>
+        <p><strong>1 hour connected = 1 hour saved.</strong> When you use a session, time decreases. Watch ads to add more.</p>
+    </div>
 
     <div class="card">
+        <h3>❓ What happens if I disconnect?</h3>
+        <p>Your session is saved. You can reconnect anytime. Session time only decreases when you're actively using it.</p>
+    </div>
+
+    <!-- ============================================================
+         CONTACT FORM
+         ============================================================ -->
+    <h2>📧 Contact Support (Admin Only)</h2>
+
+    <div class="card">
+        <p style="color:var(--text-muted); margin-bottom:16px;">
+            For privacy concerns, bug reports, or feature requests that require admin attention.
+            For general "how-to" questions, please use the <strong>Community Forum</strong> above.
+        </p>
+
         <form id="contactForm">
             <div class="form-group">
                 <label for="name">Your Name</label>
@@ -113,7 +154,9 @@
         <div id="formStatus"></div>
     </div>
 
-    <!-- Footer -->
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
     <footer class="footer">
         <p>
             <a href="index.html">Home</a>
