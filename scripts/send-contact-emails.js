@@ -1,5 +1,5 @@
 // ============================================================
-// KeepEduroam - Send Contact Emails (Debug Version)
+// KeepEduroam - Send Contact Emails (Full Debug)
 // ============================================================
 
 const admin = require('firebase-admin');
@@ -58,13 +58,28 @@ async function sendEmails() {
   console.log('🔍 Checking for new contacts...');
 
   try {
+    console.log('📌 Query: contacts where sent != true');
+    
     const snapshot = await db.collection('contacts')
       .where('sent', '!=', true)
       .limit(50)
       .get();
 
+    console.log(`📌 Query returned ${snapshot.size} documents`);
+
     if (snapshot.empty) {
       console.log('✅ No new contacts to send.');
+      
+      // Check if there are ANY contacts at all
+      const allDocs = await db.collection('contacts').limit(5).get();
+      console.log(`📌 Total contacts in collection: ${allDocs.size}`);
+      
+      if (!allDocs.empty) {
+        allDocs.forEach(doc => {
+          const data = doc.data();
+          console.log(`   - ${data.email || 'no email'}: sent=${data.sent}`);
+        });
+      }
       return;
     }
 
@@ -81,10 +96,15 @@ async function sendEmails() {
       const category = data.category || 'General';
       const message = data.message || 'No message';
 
-      console.log(`📧 Forwarding message from: ${userEmail}`);
+      console.log(`📧 Processing document ${docId}`);
+      console.log(`   From: ${userEmail}`);
+      console.log(`   Name: ${userName}`);
+      console.log(`   Category: ${category}`);
 
       try {
-        await transporter.sendMail({
+        console.log(`   📤 Attempting to send email...`);
+        
+        const info = await transporter.sendMail({
           from: userEmail,
           to: SUPPORT_EMAIL,
           replyTo: userEmail,
@@ -117,16 +137,21 @@ async function sendEmails() {
           `
         });
 
+        console.log(`   ✅ Email sent! Message ID: ${info.messageId}`);
+
         await doc.ref.update({
           sent: true,
           sentAt: admin.firestore.FieldValue.serverTimestamp()
         });
 
-        console.log(`✅ Forwarded message from: ${userEmail}`);
+        console.log(`   ✅ Marked as sent in Firestore`);
         sentCount++;
 
       } catch (error) {
-        console.error(`❌ Failed to forward from ${userEmail}:`, error.message);
+        console.error(`   ❌ Failed to send:`, error.message);
+        if (error.response) {
+          console.error(`   📌 Gmail error: ${error.response}`);
+        }
         errorCount++;
       }
     }
