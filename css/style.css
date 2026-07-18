@@ -1,23 +1,44 @@
 /* ============================================================
    KeepEduroam - Shared Styles
+   Brand Colors Applied
    ============================================================ */
 
 :root {
-    --primary: #0A0E1A;
-    --secondary: #1A2035;
-    --accent: #FFD700;
-    --accent-hover: #E6C200;
-    --text: #ECF0F1;
-    --text-muted: #95A5A6;
-    --text-dark: #4A5568;
-    --bg: #0A0E1A;
-    --card-bg: #1A2035;
-    --border: #2D3748;
+    /* ===== Primary Palette ===== */
+    --primary: #0A0E1A;        /* Main background */
+    --secondary: #1A2035;      /* Cards, panels, modals */
+    --accent: #4ECDC4;         /* Primary CTAs, buttons, links */
+    --gold: #FFD700;           /* Watch Ad/Earn actions, rewards */
+    --text: #FFFFFF;           /* Main text */
+    --text-muted: #95A5A6;     /* Subtitles, muted text */
+    --success: #2ECC71;        /* Connected status */
+    --warning: #F39C12;        /* Expiring soon */
+    --danger: #E74C3C;         /* Disconnected, errors */
+    --border: #2D3748;         /* Dividers, outlines */
+    
+    /* ===== Supporting Colors ===== */
+    --card-bg: #1A2035;        /* Card background */
+    --input-bg: #0A0E1A;       /* Form fields */
+    --hover: #5EDCD4;          /* Button hover state */
+    
+    /* ===== Typography ===== */
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --radius: 12px;
     --radius-sm: 8px;
     --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --max-width: 900px;
+}
+
+/* ===== Light Mode ===== */
+[data-theme="light"] {
+    --primary: #FFFFFF;
+    --secondary: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text: #1A202C;
+    --text-muted: #4A5568;
+    --border: #E2E8F0;
+    --input-bg: #F8FAFC;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -32,21 +53,21 @@ html {
 
 body {
     font-family: var(--font);
-    background: var(--bg);
+    background: var(--primary);
     color: var(--text);
     line-height: 1.7;
     padding: 20px;
     min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
 }
 
-/* Container */
 .container {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 30px 24px;
 }
 
-/* Typography */
+/* ===== Typography ===== */
 h1 {
     font-size: 2.2rem;
     font-weight: 700;
@@ -90,7 +111,7 @@ a {
 }
 
 a:hover {
-    color: var(--accent-hover);
+    color: var(--hover);
     text-decoration: underline;
 }
 
@@ -104,14 +125,14 @@ ul li {
     margin-bottom: 6px;
 }
 
-/* Cards */
+/* ===== Cards ===== */
 .card {
     background: var(--card-bg);
     border-radius: var(--radius);
     padding: 20px 24px;
     margin-bottom: 16px;
     border: 1px solid var(--border);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
 }
 
 .card:hover {
@@ -124,7 +145,7 @@ ul li {
     color: var(--accent);
 }
 
-/* Buttons */
+/* ===== Buttons ===== */
 .btn {
     display: inline-block;
     padding: 14px 32px;
@@ -144,7 +165,18 @@ ul li {
 }
 
 .btn-primary:hover {
-    background: var(--accent-hover);
+    background: var(--hover);
+    transform: scale(1.02);
+    text-decoration: none;
+}
+
+.btn-gold {
+    background: var(--gold);
+    color: var(--primary);
+}
+
+.btn-gold:hover {
+    background: #E6C200;
     transform: scale(1.02);
     text-decoration: none;
 }
@@ -161,7 +193,68 @@ ul li {
     text-decoration: none;
 }
 
-/* Badge */
+/* ===== Form Elements ===== */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text);
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* ===== Status Messages ===== */
+#formStatus {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    display: none;
+}
+
+#formStatus.success {
+    display: block;
+    background: rgba(46, 204, 113, 0.2);
+    border: 1px solid var(--success);
+    color: var(--success);
+}
+
+#formStatus.error {
+    display: block;
+    background: rgba(231, 76, 60, 0.2);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+/* ===== Badge ===== */
 .badge {
     display: inline-block;
     background: var(--accent);
@@ -173,7 +266,7 @@ ul li {
     letter-spacing: 0.3px;
 }
 
-/* Grid */
+/* ===== Grid ===== */
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr;
@@ -187,7 +280,7 @@ ul li {
     }
 }
 
-/* Footer */
+/* ===== Footer ===== */
 .footer {
     margin-top: 48px;
     padding-top: 24px;
@@ -206,7 +299,32 @@ ul li {
     color: var(--accent);
 }
 
-/* Responsive */
+/* ===== Theme Toggle ===== */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--text);
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent);
+    transform: scale(1.05);
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 480px) {
     h1 {
         font-size: 1.6rem;
@@ -235,7 +353,7 @@ ul li {
     }
 }
 
-/* Utilities */
+/* ===== Utilities ===== */
 .text-center {
     text-align: center;
 }
@@ -250,4 +368,7 @@ ul li {
 }
 .highlight {
     color: var(--accent);
+}
+.gold {
+    color: var(--gold);
 }
